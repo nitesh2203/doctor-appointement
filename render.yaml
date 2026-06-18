@@ -12,5 +12,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: CI
+        value: "false"
       - key: JWT_SECRET
         generateValue: true
