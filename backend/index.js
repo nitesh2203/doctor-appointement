@@ -46,13 +46,6 @@ const decodeJwt = (token) => {
   }
 };
 
-initDb((seedErr) => {
-  if (seedErr) console.error('Seed error:', seedErr);
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
-});
-
 app.get('/api/doctors', (req, res) => {
   const sql = `
     SELECT d.id, u.name, u.email, d.specialty, d.rating, d.review_count
@@ -577,4 +570,9 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// app.listen is started inside the initDb callback above
+initDb((seedErr) => {
+  if (seedErr) console.error('Seed error:', seedErr);
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+});
