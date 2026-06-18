@@ -118,6 +118,10 @@ SQLite schema lives in `backend/db/database.js`. Tables: `users`, `doctors`, `pa
 |--------|-----------------------|-------------|
 | Doctor | `sharma@medibook.com` | `doctor123` |
 | Admin  | `admin@medibook.com`  | `admin123`  |
+| Patient | `rahul@email.com`    | `patient123` |
+| Patient | `priya@email.com`    | `patient123` |
+| Patient | `amit@email.com`     | `patient123` |
+| Patient | `sneha@email.com`    | `patient123` |
 
 ## License
 

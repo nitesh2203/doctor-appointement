@@ -26,7 +26,34 @@ const SEED_USERS = [
   { name: 'Dr. Anita Desai', email: 'desai@medibook.com', password: 'doctor123', role: 'doctor' },
   { name: 'Dr. Vikram Joshi', email: 'joshi@medibook.com', password: 'doctor123', role: 'doctor' },
   { name: 'Admin User', email: 'admin@medibook.com', password: 'admin123', role: 'admin' },
+  { name: 'Rahul Sharma', email: 'rahul@email.com', password: 'patient123', role: 'patient' },
+  { name: 'Priya Patel', email: 'priya@email.com', password: 'patient123', role: 'patient' },
+  { name: 'Amit Kumar', email: 'amit@email.com', password: 'patient123', role: 'patient' },
+  { name: 'Sneha Reddy', email: 'sneha@email.com', password: 'patient123', role: 'patient' },
 ];
+
+const SEED_PATIENT_PROFILES = {
+  'rahul@email.com': {
+    phone: '9876543210', dob: '1995-03-15', gender: 'male',
+    address: '12 MG Road, Pune', blood: 'B+', allergies: 'Penicillin',
+    medical_info: 'Mild asthma',
+  },
+  'priya@email.com': {
+    phone: '9123456789', dob: '1998-07-22', gender: 'female',
+    address: '45 Park Street, Mumbai', blood: 'O+', allergies: '',
+    medical_info: 'No chronic conditions',
+  },
+  'amit@email.com': {
+    phone: '9988776655', dob: '1990-11-08', gender: 'male',
+    address: '78 Ring Road, Bangalore', blood: 'A+', allergies: 'Dust',
+    medical_info: 'Hypertension — on medication',
+  },
+  'sneha@email.com': {
+    phone: '9765432109', dob: '2000-01-30', gender: 'female',
+    address: '3 Lake View, Hyderabad', blood: 'AB+', allergies: 'Peanuts',
+    medical_info: 'Seasonal allergies',
+  },
+};
 
 const DOCTORS_SQL = `
   CREATE TABLE IF NOT EXISTS doctors (
@@ -209,7 +236,7 @@ function seedDoctorsAndPatients(done) {
   });
 
   // ── Seed patients ──
-  db.all("SELECT id, name FROM users WHERE role = 'patient'", [], (err, patients) => {
+  db.all("SELECT id, name, email FROM users WHERE role = 'patient'", [], (err, patients) => {
     if (err) {
       console.error('Error fetching patient users:', err);
       return finish();
@@ -230,9 +257,19 @@ function seedDoctorsAndPatients(done) {
         }
         if (existing) return ptFinish();
 
+        const profile = SEED_PATIENT_PROFILES[pt.email] || {};
         db.run(
           'INSERT INTO patients (user_id, phone, dob, gender, address, blood, allergies, medical_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-          [pt.id, '', '', '', '', '', '', ''],
+          [
+            pt.id,
+            profile.phone || '',
+            profile.dob || '',
+            profile.gender || '',
+            profile.address || '',
+            profile.blood || '',
+            profile.allergies || '',
+            profile.medical_info || '',
+          ],
           (insertErr) => {
             if (insertErr) console.error('Error seeding patient:', insertErr);
             else console.log(`Seeded patient entry for user ${pt.id} (${pt.name})`);
