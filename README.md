@@ -1,43 +1,49 @@
-# 🩺 MediBook — Doctor Appointment Booking Platform
+# MediBook — Doctor Appointment Booking Platform
 
 MediBook is a full-stack healthcare appointment booking system that connects patients with doctors through three dedicated portals. Patients can discover doctors, book appointments through a guided multi-step flow, and rate their experience after a visit. Doctors can accept or reject incoming requests, manage their daily schedule, and mark consultations complete. Admins get a dashboard to monitor overall platform activity.
+
+## Project structure
+
+```
+MediBook-main/
+├── backend/     # Node.js + Express API
+├── frontend/    # React app
+├── package.json # Root build/start scripts (Render deploy)
+└── render.yaml  # Single-service Render blueprint
+```
 
 ## Features
 
 ### Patient Portal
 - Register and log in with JWT-based authentication
 - Browse and search doctors by name or specialty
-- Book appointments through a guided multi-step flow (doctor → date → time slot → reason/symptoms → confirmation)
+- Book appointments through a guided multi-step flow
 - View, reschedule, or cancel appointments
 - Rate and review doctors after a completed appointment
-- Manage personal profile and medical history (blood group, allergies, medical history)
+- Manage personal profile and medical history
 
 ### Doctor Portal
 - View and manage incoming appointment requests
-- Accept or reject bookings with an optional note to the patient
-- Mark completed appointments, unlocking the patient rating flow
-- View a day-by-day schedule of upcoming appointments
-- View profile stats, average rating, and patient reviews
+- Accept or reject bookings with an optional note
+- Mark completed appointments
+- View schedule and profile stats
 
 ### Admin Dashboard
-- Monitor total patients, total doctors, today's appointments, and pending requests
-- View doctor demand and booking volume per specialty
-- Search registered patients
-- View top-rated doctors and review counts
+- Monitor patients, doctors, appointments, and pending requests
+- Search registered patients and view top-rated doctors
 
 ## Tech Stack
 
-| Layer          | Technology                          |
-|----------------|--------------------------------------|
-| Frontend       | React, React Router, Context API     |
-| Backend        | Node.js, Express                      |
-| Database       | SQLite (`sqlite3`, `bcryptjs`)        |
-| Icons          | Lucide React                          |
+| Layer    | Technology                   |
+|----------|------------------------------|
+| Frontend | React, Context API           |
+| Backend  | Node.js, Express             |
+| Database | SQLite (`sqlite3`, `bcryptjs`) |
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (v16 or later recommended)
+- Node.js v18 or later
 - npm
 
 ### Installation
@@ -45,46 +51,74 @@ MediBook is a full-stack healthcare appointment booking system that connects pat
 ```bash
 git clone https://github.com/<your-username>/medibook.git
 cd medibook
-npm install
+npm run install:all
 ```
 
-### Running the app
+### Running locally
 
-Start the backend API server:
+Terminal 1 — backend:
 
 ```bash
-npm run server
+npm run dev:backend
 ```
 
-In a separate terminal, start the React frontend:
+Terminal 2 — frontend:
 
 ```bash
-npm start
+npm run dev:frontend
 ```
 
-The app will be available at `http://localhost:3000`, with the API running at `http://localhost:5000`.
+- Frontend: `http://localhost:3001`
+- API: `http://localhost:5000`
 
-### Environment Variables
+### Environment variables
 
-Create a `.env` file in the `server/` directory for secrets such as your JWT signing key:
+**`frontend/.env`** (local dev):
 
 ```
-JWT_SECRET=your_secret_key_here
+PORT=3001
+REACT_APP_BACKEND_URL=http://localhost:5000
+```
+
+**`backend/.env`** (local dev):
+
+```
 PORT=5000
+JWT_SECRET=your_secret_key_here
+CORS_ORIGIN=http://localhost:3001
 ```
+
+## Deploy on Render (single service)
+
+Both the React UI and API run on one URL.
+
+1. Push this repo to GitHub
+2. Render → **New** → **Blueprint** → connect repo
+3. Render uses `render.yaml` automatically
+
+Or create a **Web Service** manually:
+
+| Field         | Value           |
+|---------------|-----------------|
+| Build Command | `npm run build` |
+| Start Command | `npm start`     |
+
+Environment variables:
+
+- `NODE_ENV` = `production`
+- `JWT_SECRET` = (generate a secure random string)
 
 ## Database
 
-MediBook uses SQLite for persistence. The schema is defined in `server/database.js` and includes the following tables: `users`, `doctors`, `patients`, `appointments`, and `reviews`. The database file is excluded from version control via `.gitignore` — running the server for the first time will create a fresh local database automatically.
+SQLite schema lives in `backend/db/database.js`. Tables: `users`, `doctors`, `patients`, `appointments`, `reviews`. The database file is gitignored and created on first server start. Demo users are seeded automatically.
 
-## Roadmap / Ideas
+## Demo logins
 
-- Email or SMS appointment reminders
-- Doctor availability calendar editing from the doctor portal
-- Payment integration for consultation fees
-- Video consultation support
+| Role   | Email                 | Password    |
+|--------|-----------------------|-------------|
+| Doctor | `sharma@medibook.com` | `doctor123` |
+| Admin  | `admin@medibook.com`  | `admin123`  |
 
 ## License
 
-This project is open source and available for personal or educational use. Add a license file (e.g. MIT) if you plan to distribute or accept contributions.
-
+Open source for personal or educational use.

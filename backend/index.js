@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -567,5 +568,13 @@ app.get('/api/auth/me', (req, res) => {
     return res.status(401).json({ error: 'Invalid token' });
   }
 });
+
+if (process.env.NODE_ENV === 'production') {
+  const buildPath = path.join(__dirname, '../frontend/build');
+  app.use(express.static(buildPath));
+  app.get(/^(?!\/api).*/, (_req, res) => {
+    res.sendFile(path.join(buildPath, 'index.html'));
+  });
+}
 
 // app.listen is started inside the initDb callback above

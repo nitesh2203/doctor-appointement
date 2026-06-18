@@ -36,7 +36,7 @@ const DOCTOR_ACCOUNTS = DOCTORS_DATA.map(d => ({
   doctorId: d.id,
 }));
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const DOCTOR_ID_MAP = {
   'sharma@medibook.com': 'd1',

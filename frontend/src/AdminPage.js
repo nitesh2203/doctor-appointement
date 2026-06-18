@@ -3,7 +3,7 @@ import { useApp } from './AppContext';
 import { Card, Btn, Input, Divider, StatusBadge, StarRating } from './components';
 
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const metrics = [
   { label: 'Total Patients', value: '0', key: 'patients' },
